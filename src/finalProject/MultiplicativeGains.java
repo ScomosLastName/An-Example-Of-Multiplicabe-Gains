@@ -9,7 +9,7 @@ import java.util.TimerTask;
 import java.util.ArrayList;
 
 @SuppressWarnings("serial")
-public class OneMoreFlip extends JPanel implements ActionListener {
+public class MultiplicativeGains extends JPanel implements ActionListener {
 
 	// JFrame is the main window of the application.
     JFrame frame;
@@ -77,7 +77,7 @@ public class OneMoreFlip extends JPanel implements ActionListener {
     public void init() {
     	balanceHistoryPoints.add(yIntercept);
     	
-        frame = new JFrame("Coin Flip");
+        frame = new JFrame("Multiplicative Gains");
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel();
         JPanel graphPanel = new JPanel() {
@@ -238,7 +238,7 @@ public class OneMoreFlip extends JPanel implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new OneMoreFlip().init();
+        new MultiplicativeGains().init();
     }
 
     public void actionPerformed(ActionEvent e) {
