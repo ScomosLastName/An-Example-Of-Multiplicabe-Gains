@@ -243,7 +243,7 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == flip) {
-            coinFlip();
+            coinFlip(biasToHeads);
         } else if (e.getSource() == timerButton) {
             if (isTimeOn) {
                 timer1.cancel();
@@ -301,14 +301,14 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         }
     }
 		
-    public void coinFlip() {
+    public void coinFlip(double bias) {
     	turn++;
     	
         char result; // Variable to store the result of the coin flip
 
         double coinFlip = Math.random(); // Generate a random number between 0 and 1
 
-        if (coinFlip < biasToHeads) {
+        if (coinFlip < bias) {
             result = 'H'; // If the random number is less than the bias, set the result to heads
         } else {
             result = 'T'; // Otherwise, set the result to tails
@@ -342,7 +342,7 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
     public class AnimationTask extends TimerTask {
         public void run() {
             // Perform a coin flip as part of the animation
-            coinFlip();
+            coinFlip(biasToHeads);
         } 
     }
 		
