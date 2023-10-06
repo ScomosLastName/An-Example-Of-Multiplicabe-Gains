@@ -302,6 +302,12 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
     }
 		
     public void coinFlip(double bias) {
+    	if (bias < 0) {
+    		bias = 0;
+    	} else if (bias > 1 ) {
+    		bias = 1;
+    	}
+    	
     	turn++;
     	
         char result; // Variable to store the result of the coin flip
