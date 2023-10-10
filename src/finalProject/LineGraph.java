@@ -41,13 +41,9 @@ public class LineGraph {
 		}	
 	}
 	
-	public void setSize(int width, int height) {
-		this.width = width; // Set the width of the graph
-		this.height = height; // Set the height of the graph
-	}
-	
-	public void setColour(Color colour) {
+	public void setColour(Color colour, Color frameColour) {
 		this.colour = colour; // Set the color of the graph
+		this.frameColour = frameColour; // Set the color of the graph's frame
 	}
 	
 	public void drawAxis(Graphics g) {
