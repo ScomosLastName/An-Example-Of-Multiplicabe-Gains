@@ -45,7 +45,7 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
     double balance = 100;
     double fractionOfWealthToBet = 1;
     double amountToGain = 0.8;
-    double amountToLoose = 0.5;
+    double amountToLose = 0.5;
     double biasToHeads = 0.5;
 
     // Point object to represent the y-intercept of the balance history graph.
@@ -132,7 +132,7 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         
         wealthToBetInput = new JTextField("" + fractionOfWealthToBet * 100, 4);
         amountToWinInput = new JTextField("" + amountToGain * 100, 4);
-        amountToLooseInput = new JTextField("" + amountToLoose * 100, 4);
+        amountToLooseInput = new JTextField("" + amountToLose * 100, 4);
         biasToHeadsInput = new JTextField("" + biasToHeads * 100, 4);
         
         wealthToBetLabel = new JLabel("<html><body>&nbsp Percentage of wealth<br>&nbsp to bet:</body></html>");
@@ -145,8 +145,11 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         amountToLooseLabel.setForeground(myColor);
         biasToHeadsLabel.setForeground(myColor);       
         
-        formula = new JLabel("r = (1 + 	" + fractionOfWealthToBet + " * " + amountToGain + ")^" + biasToHeads + " * " +
-        					"(1 + 	" + fractionOfWealthToBet + " * " + amountToLoose + ")^" +  (1 - biasToHeads));
+        formula = new JLabel(
+    					(Math.pow((1 + fractionOfWealthToBet * amountToGain), biasToHeads) * Math.pow((1 - fractionOfWealthToBet * amountToLose), (1 - biasToHeads)) )+ 
+    					" = (1 + 	" + fractionOfWealthToBet + " * " + amountToGain + ")^" + biasToHeads + " * " +
+    					"(1 + 	" + fractionOfWealthToBet + " * " + amountToLose + ")^" +  (1 - biasToHeads)
+    					);
         formula.setForeground(Color.WHITE);
         
         timerButton.setBackground(Color.green);
@@ -286,15 +289,29 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         } else if (e.getSource() == submit || e.getSource() == confirmRestartButton) {
             // Process input values and update variables
             if (wealthToBetInput != null) {
+            	
+	        	if (Double.parseDouble(wealthToBetInput.getText()) / 100 < 0) {
+	        		wealthToBetInput.setText("0.0");
+	        	} else if (Double.parseDouble(wealthToBetInput.getText()) / 100 > 1 ) {
+	        		wealthToBetInput.setText("100.0");
+	        	} // setting the value of the input text field to a number between 0 and 100
+        	
                 fractionOfWealthToBet = Double.parseDouble(wealthToBetInput.getText()) / 100;
             }
             if (amountToWinInput != null) {
                 amountToGain = Double.parseDouble(amountToWinInput.getText()) / 100;
             }
             if (amountToLooseInput != null) {
-                amountToLoose = Double.parseDouble(amountToLooseInput.getText()) / 100;
+                amountToLose = Double.parseDouble(amountToLooseInput.getText()) / 100;
             }
             if (biasToHeadsInput != null) {
+            	
+	        	if (Double.parseDouble(biasToHeadsInput.getText()) / 100 < 0) {
+	        		biasToHeadsInput.setText("0.0");
+	        	} else if (Double.parseDouble(biasToHeadsInput.getText()) / 100 > 1 ) {
+	        		biasToHeadsInput.setText("100.0");
+	        	} // setting the value of the input text field to a number between 0 and 100
+            	
                 biasToHeads = Double.parseDouble(biasToHeadsInput.getText()) / 100;
             }
             updateFormula(); // Update the formula with the new values
@@ -330,7 +347,7 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         if (result == 'H') {
             balance = balance + ((balance * fractionOfWealthToBet) * amountToGain);
         } else {
-            balance = balance - ((balance * fractionOfWealthToBet) * amountToLoose);
+            balance = balance - ((balance * fractionOfWealthToBet) * amountToLose);
         }
         
         // Round down the balance to two decimal places
@@ -374,7 +391,10 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
 
     public void updateFormula() {
         // Update the formula text based on the input values
-        formula.setText("r = (1 + " + fractionOfWealthToBet + " * " + amountToGain + ")^" + biasToHeads + " * " +
-                        "(1 + " + fractionOfWealthToBet + " * " + amountToLoose + ")^" + (1 - biasToHeads));
+        formula.setText(
+        		Math.pow((1 + fractionOfWealthToBet * amountToGain), biasToHeads) * Math.pow((1 - fractionOfWealthToBet * amountToLose), (1 - biasToHeads)) + 
+				" = (1 + 	" + fractionOfWealthToBet + " * " + amountToGain + ")^" + biasToHeads + " * " +
+				"(1 + 	" + fractionOfWealthToBet + " * " + amountToLose + ")^" +  (1 - biasToHeads)
+				);
     }
 }
