@@ -320,7 +320,7 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
             	
                 biasToHeads = Double.parseDouble(biasToHeadsInput.getText()) / 100;
             }
-            updateFormula(); // Update the formula with the new values
+            updateFormula(); 
         }
     }
 		
