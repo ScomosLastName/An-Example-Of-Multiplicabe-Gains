@@ -33,7 +33,8 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
     JLabel percentSign0, percentSign1, percentSign2, percentSign3; // %
     JLabel formula;
     JLabel biasToHeadsLabel;
-    TextArea coinFlipResultArea;
+    JLabel coinFlipResultsHeads;
+    JLabel coinFlipResultsTails;
 
     // Variable to keep track of the current turn.
     int turn = 0;
@@ -49,7 +50,7 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
     double biasToHeads = 0.5;
 
     // Point object to represent the y-intercept of the balance history graph.
-    Point yIntercept = new Point(turn, (int) balance);
+    Point yIntercept = new Point(turn, balance);
 
     // ArrayList to store the balance history as a series of points.
     ArrayList<Point> balanceHistoryPoints = new ArrayList<Point>();
@@ -67,6 +68,10 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
     int initialDelay = 10;
     int refreshRate = 50;
     boolean isTimeOn = false;
+    
+    //Intergers to count the number of heads and tails
+    int headsCount = 0;
+    int tailsCount = 0;
 
     // Variable to track if the game is waiting for restart confirmation.
     boolean waitToConfrimRestart = false;
@@ -103,7 +108,7 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
     	        int textHeight = fontMetrics.getHeight();
     	        
     	        if (balance == 9.223372036854776E16) {
-    	        	textWidth = fontMetrics.stringWidth("Lim x→∞");
+    	        	textWidth = fontMetrics.stringWidth("<html>Lim<br>x→∞</html>");
     	        	g.drawString("Lim X→∞", (getWidth() - textWidth) / 2, (getHeight() - textHeight) / 2);
     	        } else {
     	        	g.drawString("$" + balance, (getWidth() - textWidth) / 2, (getHeight() - textHeight) / 2);
@@ -113,14 +118,12 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         
         JPanel inputPanel = new JPanel(new GridBagLayout());
         GridBagConstraints inputPanelConstarints = new GridBagConstraints();
-        
-        coinFlipResultArea = new TextArea("", 50, 2, TextArea.SCROLLBARS_VERTICAL_ONLY);
-		coinFlipResultArea.setEditable(false);
-		
-		add(coinFlipResultArea);
-        
+
         JPanel outputPanel = new JPanel(new GridBagLayout());
         GridBagConstraints outputPanelConstarints = new GridBagConstraints();
+        
+        coinFlipResultsHeads = new JLabel("" + headsCount + " Heads ");
+        coinFlipResultsTails = new JLabel ("" + tailsCount + " tails ");
         
         JPanel formulaPanel = new JPanel();
 
@@ -143,7 +146,9 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         wealthToBetLabel.setForeground(myColor);
         amountToGainLabel.setForeground(myColor);
         amountToLooseLabel.setForeground(myColor);
-        biasToHeadsLabel.setForeground(myColor);       
+        biasToHeadsLabel.setForeground(myColor);   
+        coinFlipResultsHeads.setForeground(myColor);
+        coinFlipResultsTails.setForeground(myColor);
         
         formula = new JLabel(
     					(Math.pow((1 + fractionOfWealthToBet * amountToGain), biasToHeads) * Math.pow((1 - fractionOfWealthToBet * amountToLose), (1 - biasToHeads)) )+ 
@@ -195,8 +200,9 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
 // Adding to outputPanel
         outputPanelConstarints.gridx = 1;
         outputPanelConstarints.gridy = 1;
-        outputPanel.add(coinFlipResultArea, outputPanelConstarints);
-        coinFlipResultArea.setEditable(false);
+        outputPanel.add(coinFlipResultsHeads, outputPanelConstarints);
+        outputPanelConstarints.gridy++;
+        outputPanel.add(coinFlipResultsTails, outputPanelConstarints);
         
 // Adding to formulaPanel
         formulaPanel.add(formula);
@@ -333,12 +339,11 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
 
         if (coinFlip < bias) {
             result = 'H'; // If the random number is less than the bias, set the result to heads
+            headsCount++;
         } else {
             result = 'T'; // Otherwise, set the result to tails
+            tailsCount++;
         }
-        
-        // Add the result to the output text area
-		coinFlipResultArea.setText(coinFlipResultArea.getText() + Character.toString(result) + "\n");
 
         // Add the result to the list of flips
         flips.add(result);
@@ -359,7 +364,7 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         // Repaint the frame to reflect the updated balance
         frame.repaint();
         
-        System.out.println(balance);
+        System.out.println(headsCount + " " + tailsCount);
     }
 
     public class AnimationTask extends TimerTask {
@@ -385,7 +390,9 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         balanceChart.reset(yIntercept);
         
         // Reset the coin flip result area
-        coinFlipResultArea.setText(null);
+        headsCount = 0;
+        tailsCount = 0;
+        
         flips.clear();
     }
 
