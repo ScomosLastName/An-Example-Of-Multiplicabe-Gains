@@ -122,8 +122,8 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         JPanel outputPanel = new JPanel(new GridBagLayout());
         GridBagConstraints outputPanelConstarints = new GridBagConstraints();
         
-        coinFlipResultsHeads = new JLabel("" + headsCount + " Heads ");
-        coinFlipResultsTails = new JLabel ("" + tailsCount + " tails ");
+        coinFlipResultsHeads = new JLabel(headsCount + " Heads ");
+        coinFlipResultsTails = new JLabel (tailsCount + " tails ");
         
         JPanel formulaPanel = new JPanel();
 
@@ -209,7 +209,9 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         
         confirmRestartButton.setVisible(false);
 
-        balanceChart = new LineGraph(balanceHistoryPoints, 20, 20, getWidth() - 40, getHeight() - 30, Color.RED, Color.WHITE); //getWidth() - 40, getHeight() - 70,
+        balanceChart = new LineGraph(
+        		balanceHistoryPoints, 20, 20, getWidth() - 40, getHeight() - 30, Color.RED, Color.WHITE
+        		); //getWidth() - 40, getHeight() - 70,
 
         mainPanel.add(buttonPanel, BorderLayout.NORTH);
         mainPanel.add(graphPanel, BorderLayout.CENTER);
@@ -364,6 +366,8 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
         // Repaint the frame to reflect the updated balance
         frame.repaint();
         
+        updateOutputPanel();
+        
         System.out.println(headsCount + " " + tailsCount);
     }
 
@@ -399,9 +403,17 @@ public class MultiplicativeGains extends JPanel implements ActionListener {
     public void updateFormula() {
         // Update the formula text based on the input values
         formula.setText(
-        		Math.pow((1 + fractionOfWealthToBet * amountToGain), biasToHeads) * Math.pow((1 - fractionOfWealthToBet * amountToLose), (1 - biasToHeads)) + 
-				" = (1 + 	" + fractionOfWealthToBet + " * " + amountToGain + ")^" + biasToHeads + " * " +
-				"(1 + 	" + fractionOfWealthToBet + " * " + amountToLose + ")^" +  (1 - biasToHeads)
+        		Math.pow((1 + fractionOfWealthToBet * amountToGain), biasToHeads) 
+        		* Math.pow((1 - fractionOfWealthToBet * amountToLose), (1 - biasToHeads)) 
+        		+ " = (1 + 	" + fractionOfWealthToBet + " * " + amountToGain + ")^" + biasToHeads 
+        		+ " * " + "(1 + 	" + fractionOfWealthToBet + " * " + amountToLose + ")^" 
+        		+ (1 - biasToHeads)
 				);
+    }
+    
+    public void updateOutputPanel() {
+    	// Update the contents of the output panel, should be called every flip
+    	coinFlipResultsHeads.setText("" + headsCount + " Heads ");
+    	coinFlipResultsTails.setText("" + tailsCount + " Tails ");
     }
 }
